@@ -14,12 +14,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public class InMemoryUserRepository implements UserRepository {
 
     private final Map<Long, User> store = new ConcurrentHashMap<Long, User>();
-    private final AtomicLong idGenerator = new AtomicLong(1);
+    private final AtomicLong seq = new AtomicLong(1);
 
     @Override
     public User save(User user) {
         // User 정보를 넘겨받았을 때, User가 없으면 insert(increment)
-        Long id = user.getId() != null ? user.getId() : idGenerator.getAndIncrement();
+        Long id = user.getId() != null ? user.getId() : seq.getAndIncrement();
         User saved = new User(id, user.getUserNm(), user.getBalance(), LocalDateTime.now());
         store.put(id, saved);
         return saved;
