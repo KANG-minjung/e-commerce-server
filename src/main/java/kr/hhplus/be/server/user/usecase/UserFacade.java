@@ -7,22 +7,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserFacade {
-    private final CheckUserUseCase checkUserUseCase;
 
-    public UserFacade(CheckUserUseCase checkUserUseCase) {
-        this.checkUserUseCase = checkUserUseCase;
+    private final UserCommandUseCase command;
+    private final UserQueryUseCase query;
+
+    public UserFacade(UserCommandUseCase command, UserQueryUseCase query) {
+        this.command = command;
+        this.query = query;
     }
 
     public Long createUser(CreateUserRequest request) {
-        return checkUserUseCase.createUser(request.userNm()).getId();
+        return command.createUser(request.userNm()).getId();
     }
 
     public void charge(Long userId, ChargeRequest request) {
-        checkUserUseCase.charge(userId, request.amount());
+        command.charge(userId, request.amount());
     }
 
     public BalanceResponse getBalance(Long userId) {
-        int balance = checkUserUseCase.getBalance(userId);
-        return new BalanceResponse(userId, balance);
+        return new BalanceResponse(userId, query.getBalance(userId));
     }
 }

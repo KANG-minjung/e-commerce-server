@@ -23,15 +23,15 @@ public class UserController {
         return userFacade.createUser(request);
     }
 
-    @PostMapping("/{userId}/charge")
+    @PostMapping("/{id}/charge")
     @Operation(summary = "사용자 잔액 충전")
-    public void charge(@PathVariable Long userId, @RequestBody ChargeRequest request) {
-        userFacade.charge(userId, request);
+    public void charge(@PathVariable Long id, @RequestBody ChargeRequest request) {
+        userFacade.charge(id, request);
     }
 
-    @GetMapping("/{userId}/balance")
+    @GetMapping("/{id}/balance")
     @Operation(summary = "사용자 잔액 조회")
-    public BalanceResponse getBalance(@PathVariable Long userId) {
-        return userFacade.getBalance(userId);
+    public BalanceResponse getBalance(@PathVariable Long id) {
+        return userFacade.getBalance(id);
     }
 }
