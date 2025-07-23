@@ -29,13 +29,13 @@ public class ItemController {
 
     @GetMapping("/{id}")
     @Operation(summary = "상품 개별 조회")
-    public ItemResponse get(@PathVariable Long id) {
-        return itemFacade.get(id);
+    public ItemResponse getOne(@PathVariable Long id) {
+        return itemFacade.getByIdWithStatus(id);
     }
 
     @GetMapping
     @Operation(summary = "상품 목록 조회")
     public List<ItemResponse> getAll() {
-        return itemFacade.getAll();
+        return itemFacade.getAllWithStatus();
     }
 }

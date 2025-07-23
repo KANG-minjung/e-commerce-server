@@ -8,34 +8,34 @@ import java.util.List;
 
 @Component
 public class ItemFacade {
-    private final ItemUseCase itemUseCase;
 
-    public ItemFacade(ItemUseCase itemUseCase) {
-        this.itemUseCase = itemUseCase;
+    private final ItemCommandUseCase command;
+    private final ItemQueryUseCase query;
+
+
+    public ItemFacade(ItemCommandUseCase command, ItemQueryUseCase query) {
+        this.command = command;
+        this.query = query;
     }
 
     public Long create(CreateItemRequest request) {
-        return itemUseCase.create(request.itemNm(), request.price(), request.itemCnt()).getId();
+        return command.create(request.itemNm(), request.price(), request.itemCnt()).getId();
     }
 
-    public ItemResponse get(Long id) {
-        Item item = itemUseCase.find(id);
-        return toResponse(item);
-    }
-
-    public List<ItemResponse> getAll() {
-        return itemUseCase.findAll().stream()
-                .map(this::toResponse)
+    public List<ItemResponse> getAllWithStatus() {
+        return query.findAll().stream()
+                .map(i -> new ItemResponse(i.getId(), i.getItemNm(), i.getPrice(), i.getItemCnt(), i.getStatus()))
                 .toList();
     }
 
-    private ItemResponse toResponse(Item item) {
-        return new ItemResponse(
-                item.getId(),
-                item.getItemNm(),
-                item.getPrice(),
-                item.getItemCnt(),
-                item.getStatus()  // 여기서 상태 계산
-        );
+    public ItemResponse getByIdWithStatus(Long id) {
+        Item i = query.find(id);
+        return new ItemResponse(i.getId(), i.getItemNm(), i.getPrice(), i.getItemCnt(), i.getStatus());
     }
+
+    // 주문 실패 시 재고 복구
+    public void revertStock(Long itemId, int quantity) {
+        command.restore(itemId, quantity);
+    }
+
 }
