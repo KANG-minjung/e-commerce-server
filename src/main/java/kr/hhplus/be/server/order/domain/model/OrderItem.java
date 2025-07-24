@@ -33,6 +33,10 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     public int getTotalPrice() {
         return price * quantity;
     }
