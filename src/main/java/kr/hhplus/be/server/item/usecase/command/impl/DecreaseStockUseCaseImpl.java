@@ -1,31 +1,28 @@
-package kr.hhplus.be.server.item.usecase;
+package kr.hhplus.be.server.item.usecase.command.impl;
 
 import kr.hhplus.be.server.common.BusinessException;
 import kr.hhplus.be.server.common.ErrorCode;
 import kr.hhplus.be.server.item.domain.model.Item;
 import kr.hhplus.be.server.item.domain.repository.ItemRepository;
+import kr.hhplus.be.server.item.usecase.command.DecreaseStockUseCase;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
-public class ItemCommandUseCaseImpl implements ItemCommandUseCase {
+public class DecreaseStockUseCaseImpl implements DecreaseStockUseCase {
 
     private ItemRepository repository;
 
-    public ItemCommandUseCaseImpl(ItemRepository repository) {}
-
-    @Override
-    public Item create(String name, int price, int itemCnt) {
-        return repository.save(new Item(null, name, itemCnt, price, LocalDateTime.now()));
+    public DecreaseStockUseCaseImpl(ItemRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public void decrease(Long itemId, int itemCnt) {
+    public void decrease(Long itemId, int amount) {
         Item item = repository.findById(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
-        item.itemCntDecrease(itemCnt);
+        item.decrease(amount);
         repository.save(item);
     }
 
@@ -33,7 +30,7 @@ public class ItemCommandUseCaseImpl implements ItemCommandUseCase {
     public void restore(Long itemId, int itemCnt) {
         Item item = repository.findById(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
-        item.itemCntIncrease(itemCnt);
+        item.restore(itemCnt);
         repository.save(item);
     }
 }

@@ -4,48 +4,57 @@ package kr.hhplus.be.server.item.domain.model;
 import kr.hhplus.be.server.common.BusinessException;
 import kr.hhplus.be.server.common.ErrorCode;
 import lombok.Getter;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Entity
 @Getter
 public class Item {
-    private final Long id;
-    private final String itemNm;
-    private int itemCnt;
-    private final int price;
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private int price;
+    private int quantity;
     private LocalDateTime updateDate;
 
-    public Item(Long id, String itemNm, int itemCnt, int price, LocalDateTime updateDate) {
-        this.id = id;
-        this.itemNm = itemNm;
-        this.itemCnt = itemCnt;
-        this.price = price;
-        this.updateDate = updateDate;
-    }
+    protected Item() {}
 
-    // 상품 재고 차감
-    public void itemCntDecrease(int count){
-        if(count <= 0) {
-            throw new IllegalArgumentException(ErrorCode.ITEM_DECREASE_ZERO_OR_NEGATIVE.message());
+    public Item(String name, int price, int quantity) {
+        if (name == null || name.isBlank()) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_NAME);
         }
-        if(itemCnt < count) {
-            throw new IllegalStateException(ErrorCode.ITEM_OUT_OF_STOCK.message());
+        if (price <= 0) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_PRICE);
         }
-        this.itemCnt -= count;
+        if (quantity < 0) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_QUANTITY);
+        }
+
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
         this.updateDate = LocalDateTime.now();
     }
 
-    // 상품 재고 증가 ( 주문이 취소 되는 경우 )
-    public void itemCntIncrease(int count){
-        if(count <= 0) {
+    // 재고 차감
+    public void decrease(int amount) {
+        if (amount <= 0 || quantity < amount) {
             throw new BusinessException(ErrorCode.ITEM_INCREASE_ZERO_OR_NEGATIVE);
         }
-
-        this.itemCnt += count;
-        this.updateDate = LocalDateTime.now();
+        this.quantity -= amount;
     }
 
-    public ItemStatus getStatus(){
-        return ItemStatus.fromQuantity(this.itemCnt);
+    // 재고 증가(주문 취소 시)
+    public void restore(int amount) {
+        if (amount <= 0) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_QUANTITY);
+        }
+        this.quantity += amount;
+    }
+
+    public boolean isSoldOut() {
+        return quantity == 0;
     }
 }
