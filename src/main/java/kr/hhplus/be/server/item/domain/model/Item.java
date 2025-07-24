@@ -41,7 +41,7 @@ public class Item {
     // 재고 차감
     public void decrease(int amount) {
         if (amount <= 0 || quantity < amount) {
-            throw new BusinessException(ErrorCode.ITEM_INCREASE_ZERO_OR_NEGATIVE);
+            throw new BusinessException(ErrorCode.STOCK_INSUFFICIENT);
         }
         this.quantity -= amount;
     }
