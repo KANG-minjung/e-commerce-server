@@ -41,4 +41,10 @@ public class UserCoupon {
         this.status = CouponStatus.USED;
         this.usedAt = LocalDateTime.now();
     }
+
+    public void validateAvailable() {
+        if (this.status != CouponStatus.AVAILABLE) {
+            throw new BusinessException(ErrorCode.COUPON_EXPIRED);
+        }
+    }
 }

@@ -5,7 +5,7 @@ import kr.hhplus.be.server.common.BusinessException;
 import kr.hhplus.be.server.common.ErrorCode;
 import lombok.Getter;
 import jakarta.persistence.*;
-
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,6 +36,23 @@ public class Item {
         this.price = price;
         this.quantity = quantity;
         this.updateDate = LocalDateTime.now();
+    }
+
+    //TestOnly
+    public Item(Long id, String name, int quantity, int price) {
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.updateDate = LocalDateTime.now();
+
+        // 리플렉션으로 id 설정하는 대신 테스트 편의성 위해 허용
+        try {
+            Field field = Item.class.getDeclaredField("id");
+            field.setAccessible(true);
+            field.set(this, id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // 재고 차감
