@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/items")
-@Tag(name = "User", description = "사용자 관련 API")
+@Tag(name = "Item", description = "상품 관련 API")
 public class ItemController {
 
     private final ItemFacade itemFacade;
