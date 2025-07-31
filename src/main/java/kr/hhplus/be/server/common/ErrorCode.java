@@ -20,12 +20,17 @@ public enum ErrorCode {
     // Item
     ITEM_DECREASE_ZERO_OR_NEGATIVE(HttpStatus.BAD_REQUEST, "I001", "상품 구매 수량은 0보다 커야 합니다."),
     ITEM_OUT_OF_STOCK(HttpStatus.BAD_REQUEST, "I002", "재고가 부족합니다."),
-    STOCK_INSUFFICIENT(HttpStatus.BAD_REQUEST, "I003", "상품 취소 수량은 0보다 크고, 기존 재고보다 적어야 합니다."),
+    ITEM_STOCK_INSUFFICIENT(HttpStatus.BAD_REQUEST, "I003", "상품 취소 수량은 0보다 크고, 기존 재고보다 적어야 합니다."),
     ITEM_COUNT_EXCEEDS_TOTAL_LIMIT(HttpStatus.BAD_REQUEST, "I004", "재고는 최대 100개 까지만 등록할 수 있습니다."),
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "I005", "존재하지 않는 상품입니다."),
     INVALID_ITEM_NAME(HttpStatus.BAD_REQUEST, "I006", "상품 명이 잘못되었습니다."),
     INVALID_ITEM_PRICE(HttpStatus.BAD_REQUEST, "I007", "상품 가격이 잘못되었습니다."),
     INVALID_ITEM_QUANTITY(HttpStatus.BAD_REQUEST, "I008", "상품 수량이 잘못되었습니다."),
+    INVALID_ITEM_PRICE_DECREASE_ZERO(HttpStatus.BAD_REQUEST, "I009", "상품 가격은 0보다 커야 합니다."),
+    INVALID_ITEM_ID(HttpStatus.BAD_REQUEST, "I010", "존재하지 않는 상품ID 입니다."),
+    INVALID_ITEM_OPTION_ID(HttpStatus.BAD_REQUEST, "I011", "유효하지 않은 옵션 ID입니다."),
+    ITEM_OPTION_STOCK_INSUFFICIENT(HttpStatus.BAD_REQUEST, "I012", "재고 수량은 0 이상이어야 합니다."),
+    INVALID_ITEM_STOCK(HttpStatus.BAD_REQUEST, "I011", "재고 정보가 없습니다."),
 
     // Coupon
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "C001", "존재하지 않는 쿠폰입니다."),

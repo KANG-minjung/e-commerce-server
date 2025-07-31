@@ -21,16 +21,15 @@ public class OrderFacade {
     private final CreateOrderUseCase createOrderUseCase;
     private final GetOrderUseCase getOrderUseCase;
     private final ItemRepository itemRepository;
-    private final DecreaseStockUseCase decreaseStockUseCase;
+//    private final DecreaseStockUseCase decreaseStockUseCase;
 
     public OrderFacade(CreateOrderUseCase createOrderUseCase,
                        GetOrderUseCase getOrderUseCase,
-                       ItemRepository itemRepository,
-                       DecreaseStockUseCase decreaseStockUseCase) {
+                       ItemRepository itemRepository) {
         this.createOrderUseCase = createOrderUseCase;
         this.getOrderUseCase = getOrderUseCase;
         this.itemRepository = itemRepository;
-        this.decreaseStockUseCase = decreaseStockUseCase;
+//        this.decreaseStockUseCase = decreaseStockUseCase;
     }
 
     public Order createOrder(Long userId, List<OrderCreateCommand.ItemOrderLine> itemRequests) {
@@ -40,12 +39,12 @@ public class OrderFacade {
                     Item item = itemRepository.findById(req.itemId())
                             .orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
 
-                    if (item.getQuantity() < req.quantity()) {
-                        throw new BusinessException(ErrorCode.STOCK_INSUFFICIENT);
-                    }
+//                    if (item.getQuantity() < req.quantity()) {
+//                        throw new BusinessException(ErrorCode.ITEM_STOCK_INSUFFICIENT);
+//                    }
 
                     // 재고 차감은 UseCase 통해 수행
-                    decreaseStockUseCase.decrease(item.getId(), req.quantity());
+//                    decreaseStockUseCase.decrease(item.getId(), req.quantity());
 
                     return new OrderCreateCommand.ItemOrderLine(item.getId(), item.getPrice(), req.quantity());
                 }).toList();
