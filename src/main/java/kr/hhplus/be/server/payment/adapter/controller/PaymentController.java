@@ -6,7 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hhplus.be.server.payment.domain.model.Payment;
 import kr.hhplus.be.server.payment.facade.PaymentFacade;
 import kr.hhplus.be.server.payment.usecase.dto.PaymentRequest;
-import kr.hhplus.be.server.payment.usecase.dto.PaymentResult;
+import kr.hhplus.be.server.payment.usecase.dto.PaymentResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,21 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/payments")
-@Tag(name = "Payment", description = "결제 관련 API")
+@RequiredArgsConstructor
 public class PaymentController {
 
-    private final PaymentFacade facade;
-
-    public PaymentController(PaymentFacade facade) {
-        this.facade = facade;
-    }
+    private final PaymentFacade paymentFacade;
 
     @PostMapping
-    @Operation(summary = "결제")
-    public ResponseEntity<PaymentResult> pay(@RequestBody PaymentRequest request) {
-        Payment payment = facade.process(request);
-        return ResponseEntity.ok(new PaymentResult(
-                payment.getId(), payment.getFinalAmount(), payment.getPaidAt()
-        ));
+    public ResponseEntity<PaymentResponse> pay(@RequestBody PaymentRequest request) {
+        PaymentResponse response = paymentFacade.pay(request);
+        return ResponseEntity.ok(response);
     }
 }

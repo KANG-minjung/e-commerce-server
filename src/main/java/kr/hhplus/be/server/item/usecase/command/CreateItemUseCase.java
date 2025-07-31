@@ -1,7 +1,8 @@
 package kr.hhplus.be.server.item.usecase.command;
 
-import kr.hhplus.be.server.item.domain.model.Item;
+import kr.hhplus.be.server.item.usecase.dto.CreateItemRequest;
+import kr.hhplus.be.server.item.usecase.dto.ItemResponse;
 
 public interface CreateItemUseCase {
-    Item create(String name, int price, int quantity);
+    ItemResponse create(CreateItemRequest request);
 }

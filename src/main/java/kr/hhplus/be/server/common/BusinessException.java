@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.common;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public class BusinessException extends RuntimeException {
@@ -10,5 +11,13 @@ public class BusinessException extends RuntimeException {
     public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
+    }
+
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
+
+    public HttpStatus getStatus() {
+        return errorCode.getStatus();
     }
 }

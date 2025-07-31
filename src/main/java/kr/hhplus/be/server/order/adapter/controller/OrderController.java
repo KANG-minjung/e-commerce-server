@@ -1,13 +1,8 @@
 package kr.hhplus.be.server.order.adapter.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.order.domain.model.Order;
+import kr.hhplus.be.server.order.usecase.dto.*;
 import kr.hhplus.be.server.order.facade.OrderFacade;
-import kr.hhplus.be.server.order.usecase.dto.OrderCreateCommand;
-import kr.hhplus.be.server.order.usecase.dto.OrderRequest;
-import kr.hhplus.be.server.order.usecase.dto.OrderResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,51 +10,36 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
-@Tag(name = "Order", description = "주문 관련 API")
+@RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderFacade facade;
+    private final OrderFacade orderFacade;
 
-    public OrderController(OrderFacade facade) {
-        this.facade = facade;
-    }
-
+    // 주문 생성
     @PostMapping
-    @Operation(summary = "주문 생성")
-    public ResponseEntity<OrderResponse> create(@RequestBody OrderRequest request) {
-        List<OrderCreateCommand.ItemOrderLine> items = request.items().stream()
-                .map(i -> new OrderCreateCommand.ItemOrderLine(i.itemId(), 0, i.quantity())) // price는 내부에서 조회
-                .toList();
-
-        Order order = facade.createOrder(request.userId(), items);
-
-        return ResponseEntity.ok(toResponse(order));
+    public ResponseEntity<OrderResponse> placeOrder(@RequestBody OrderRequest request) {
+        OrderResponse response = orderFacade.placeOrder(request);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "주문 상세 조회")
-    public ResponseEntity<OrderResponse> getById(@PathVariable Long id) {
-        Order order = facade.getOrder(id);
-        return ResponseEntity.ok(toResponse(order));
+    // 주문 상세 조회
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponse> getOrderDetail(@PathVariable Long orderId) {
+        OrderResponse response = orderFacade.getOrderDetail(orderId);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/user/{userId}")
-    @Operation(summary = "사용자 별 주문 목록 조회")
-    public ResponseEntity<List<OrderResponse>> getByUser(@PathVariable Long userId) {
-        List<Order> orders = facade.getOrdersByUser(userId);
-        return ResponseEntity.ok(orders.stream().map(this::toResponse).toList());
+    // 주문 내역 조회 (by userId)
+    @GetMapping
+    public ResponseEntity<List<OrderSummaryResponse>> getOrdersByUserId(@RequestParam Long userId) {
+        List<OrderSummaryResponse> responseList = orderFacade.getOrderList(userId);
+        return ResponseEntity.ok(responseList);
     }
 
-    private OrderResponse toResponse(Order order) {
-        return new OrderResponse(
-                order.getId(),
-                order.getUserId(),
-                order.getTotalPrice(),
-                order.getCreatedAt(),
-                order.getItems().stream()
-                        .map(i -> new OrderResponse.OrderItemResponse(
-                                i.getItemId(), i.getPrice(), i.getQuantity()))
-                        .toList()
-        );
+    // 주문 취소
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
+        orderFacade.cancelOrder(orderId);
+        return ResponseEntity.noContent().build();
     }
 }
