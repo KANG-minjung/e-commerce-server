@@ -14,3 +14,7 @@ INSERT INTO tbl_item_stock (id, item_option_id, quantity)
 VALUES (1, 1, 30),
        (2, 2, 10),
        (3, 3, 50);
+
+-- USER
+INSERT INTO tbl_user (id, user_nm, balance, update_date)
+VALUES (1, '테스트유저', 100000, CURRENT_TIMESTAMP);
