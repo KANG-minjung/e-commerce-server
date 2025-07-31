@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface JpaItemStockEntityRepository extends JpaRepository<ItemStock, Long> {
     Optional<ItemStock> findByItemOptionId(Long itemOptionId);
+    void restore(Long itemOptionId, int quantity);
 }
