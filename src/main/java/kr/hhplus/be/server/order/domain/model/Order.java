@@ -67,4 +67,15 @@ public class Order {
     public boolean isCanceled() {
         return this.status == OrderStatus.CANCELED;
     }
+
+    public boolean isPaid() {
+        return this.status == OrderStatus.PAID;
+    }
+
+    public void markPaid() {
+        if (this.status == OrderStatus.CANCELED) {
+            throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
+        }
+        this.status = OrderStatus.PAID;
+    }
 }

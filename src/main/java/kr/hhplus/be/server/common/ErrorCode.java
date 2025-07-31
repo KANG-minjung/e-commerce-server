@@ -17,6 +17,8 @@ public enum ErrorCode {
     // User Error
     USER_INVALID(HttpStatus.NOT_FOUND, "U001", "존재하지 않는 사용자입니다."),
     INVALID_USER_ID(HttpStatus.NOT_FOUND, "U002", "존재하지 않는 USER ID 입니다."),
+    INVALID_AMOUNT(HttpStatus.BAD_REQUEST, "U003", "충전 금액이 잘못되었습니다."),
+    INVALID_USER_BALANCE(HttpStatus.BAD_REQUEST, "U004", "잔액이 잘못되었습니다."),
 
     // Item
     ITEM_DECREASE_ZERO_OR_NEGATIVE(HttpStatus.BAD_REQUEST, "I001", "상품 구매 수량은 0보다 커야 합니다."),
@@ -40,15 +42,19 @@ public enum ErrorCode {
     COUPON_EXPIRED(HttpStatus.BAD_REQUEST, "C003", "만료된 쿠폰입니다."),
     COUPON_OUT_OF_STOCK(HttpStatus.BAD_REQUEST, "C004", "쿠폰이 모두 소진되었습니다."),
     COUPON_ALREADY_USED(HttpStatus.BAD_REQUEST, "C005", "사용처리된 쿠폰입니다."),
+    INVALID_COUPON_DISCOUNT(HttpStatus.BAD_REQUEST, "C006", "할인율이 잘못 되었습니다."),
 
     // Order
     ORDER_INVALID(HttpStatus.BAD_REQUEST, "O001", "잘못된 주문입니다."),
     ORDER_ITEM_INVALID(HttpStatus.BAD_REQUEST, "O002", "잘못된 주문 제품입니다."),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "O003", "존재하지 않는 주문입니다."),
-    ALREADY_CANCELED(HttpStatus.NOT_FOUND, "O004", "취소된 주문입니다."),
+    ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "O004", "취소된 주문입니다."),
+    ALREADY_PAID_ORDER(HttpStatus.BAD_REQUEST, "O005", "이미 지불이 완료된 주문입니다."),
+    INVALID_ORDER_STATUS(HttpStatus.BAD_REQUEST, "O006", "주문 상태가 잘못되었습니다."),
 
     // Payment
     PAYMENT_FAILED(HttpStatus.BAD_REQUEST, "P001", "결제 처리 중 오류가 발생했습니다."),
+    INVALID_PAY_AMOUNT(HttpStatus.BAD_REQUEST, "P002", "결제 총 금액 오류"),
 
     // Error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E001", "서버 오류 발생.")

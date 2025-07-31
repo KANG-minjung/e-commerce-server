@@ -9,24 +9,36 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "tbl_user")
 @Getter
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_nm", nullable = false)
     private String userNm;
+
+    @Column(nullable = false)
     private int balance;
+
+    @Column(name = "update_date")
     private LocalDateTime updateDate;
 
-    protected User() {}
+    protected User() {
+    }
 
-    public User(String userNm) {
-        if (userNm == null || userNm.trim().isEmpty()) {
+    public User(String name, int balance) {
+        if (name == null || name.isBlank()) {
             throw new BusinessException(ErrorCode.USER_INVALID);
         }
-        this.userNm = userNm;
-        this.balance = 0;
+        if (balance < 0) {
+            throw new BusinessException(ErrorCode.INVALID_USER_BALANCE);
+        }
+
+        this.userNm = name;
+        this.balance = balance;
         this.updateDate = LocalDateTime.now();
     }
 
@@ -66,6 +78,19 @@ public class User {
         if (balance < amount) {
             throw new BusinessException(ErrorCode.BALANCE_INSUFFICIENT);
         }
+        this.balance -= amount;
+        this.updateDate = LocalDateTime.now();
+    }
+
+    public void decreaseBalance(int amount) {
+        if (amount <= 0) {
+            throw new BusinessException(ErrorCode.INVALID_AMOUNT);
+        }
+
+        if (this.balance < amount) {
+            throw new BusinessException(ErrorCode.BALANCE_INSUFFICIENT);
+        }
+
         this.balance -= amount;
         this.updateDate = LocalDateTime.now();
     }
