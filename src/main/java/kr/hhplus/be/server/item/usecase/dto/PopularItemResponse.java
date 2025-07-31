@@ -1,4 +1,13 @@
 package kr.hhplus.be.server.item.usecase.dto;
 
-public record PopularItemResponse(Long itemId, String name, int totalSold, int remainStock) {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public class PopularItemResponse {
+    private final Long itemId;
+    private final String itemName;
+    private final Long totalSales;
+    private final int currentQuantity;
 }
