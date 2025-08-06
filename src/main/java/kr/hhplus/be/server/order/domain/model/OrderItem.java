@@ -5,39 +5,50 @@ import kr.hhplus.be.server.common.BusinessException;
 import kr.hhplus.be.server.common.ErrorCode;
 import lombok.Getter;
 
+import jakarta.persistence.*;
+import kr.hhplus.be.server.common.BusinessException;
+import kr.hhplus.be.server.common.ErrorCode;
+import lombok.Getter;
+
 @Entity
+@Table(name = "tbl_order_item")
 @Getter
 public class OrderItem {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long itemId;
-
-    private int price;
-
-    private int quantity;
-
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    protected OrderItem() {}
+    @Column(name = "item_id", nullable = false)
+    private Long itemId;
 
-    public OrderItem(Long itemId, int price, int quantity) {
-        if (itemId == null || price <= 0 || quantity <= 0) {
-            throw new BusinessException(ErrorCode.ORDER_ITEM_INVALID);
+    @Column(nullable = false)
+    private int quantity;
+
+    @Column(name = "update_date")
+    private java.time.LocalDateTime updateDate;
+
+    protected OrderItem() {
+    }
+
+    public OrderItem(Long itemId, int quantity) {
+        if (itemId == null || itemId <= 0) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_ID);
+        }
+        if (quantity <= 0) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_QUANTITY);
         }
 
         this.itemId = itemId;
-        this.price = price;
         this.quantity = quantity;
+        this.updateDate = java.time.LocalDateTime.now();
     }
 
     public void setOrder(Order order) {
         this.order = order;
-    }
-
-    public int getTotalPrice() {
-        return price * quantity;
     }
 }

@@ -10,37 +10,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "tbl_order")
 @Getter
-@Table(name = "orders")
 public class Order {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "whole_price", nullable = false)
     private int totalPrice;
 
-    private LocalDateTime createdAt;
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> items = new ArrayList<>();
+    private final List<OrderItem> orderItems = new ArrayList<>();
 
-    protected Order() {}
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
-    public Order(Long userId, List<OrderItem> orderItems) {
-        if (userId == null || orderItems == null || orderItems.isEmpty()) {
-            throw new BusinessException(ErrorCode.ORDER_INVALID);
+    protected Order() {
+    }
+
+    public Order(Long userId, int totalPrice) {
+        if (userId == null || userId <= 0) {
+            throw new BusinessException(ErrorCode.INVALID_USER_ID);
+        }
+        if (totalPrice < 0) {
+            throw new BusinessException(ErrorCode.INVALID_TOTAL_PRICE);
         }
 
         this.userId = userId;
-        this.createdAt = LocalDateTime.now();
-        this.totalPrice = 0;
+        this.totalPrice = totalPrice;
+        this.status = OrderStatus.CREATED;
+        this.updateDate = LocalDateTime.now();
+    }
 
-        for (OrderItem item : orderItems) {
-            item.setOrder(this); // 양방향 연관관계 설정
-            this.items.add(item);
-            this.totalPrice += item.getTotalPrice();
+    public void addOrderItem(OrderItem item) {
+        orderItems.add(item);
+        item.setOrder(this);
+    }
+
+    public void cancel() {
+        if (this.isCanceled()) {
+            throw new BusinessException(ErrorCode.ALREADY_CANCELED);
         }
+        this.status = OrderStatus.CANCELED;
+        this.updateDate = LocalDateTime.now();
+    }
+
+    public boolean isCanceled() {
+        return this.status == OrderStatus.CANCELED;
+    }
+
+    public boolean isPaid() {
+        return this.status == OrderStatus.PAID;
+    }
+
+    public void markPaid() {
+        if (this.status == OrderStatus.CANCELED) {
+            throw new BusinessException(ErrorCode.INVALID_ORDER_STATUS);
+        }
+        this.status = OrderStatus.PAID;
     }
 }

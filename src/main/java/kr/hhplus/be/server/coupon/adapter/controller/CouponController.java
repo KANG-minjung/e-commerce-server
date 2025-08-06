@@ -32,8 +32,8 @@ public class CouponController {
     public ResponseEntity<List<UserCouponResponse>> getUserCoupons(@PathVariable Long userId) {
         List<UserCouponResponse> result = facade.getUserCoupons(userId).stream()
                 .map(uc -> new UserCouponResponse(
-                        uc.getId(), uc.getUserId(), uc.getCouponId(),
-                        uc.getStatus(), uc.getIssuedAt(), uc.getUsedAt()))
+                        uc.getId(), uc.getUserId(), uc.getId(),
+                        uc.getStatus(), uc.getIssuedDate(), uc.getUsedDate()))
                 .toList();
 
         return ResponseEntity.ok(result);
@@ -45,7 +45,7 @@ public class CouponController {
         List<Coupon> coupons = facade.getAvailableCoupons();
         return ResponseEntity.ok(coupons.stream()
                 .map(c -> new CouponInfoResponse(
-                        c.getId(), c.getName(), c.getType(), c.getDiscountRate(),
+                        c.getId(), c.getCouponNm(), c.getCouponType(), c.getDiscountRate(),
                         c.getIssueLimit(), c.getIssuedCount()))
                 .toList());
     }

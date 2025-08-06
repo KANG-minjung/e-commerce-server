@@ -1,48 +1,44 @@
 package kr.hhplus.be.server.item.facade;
 
-import kr.hhplus.be.server.item.domain.model.Item;
+import kr.hhplus.be.server.item.usecase.command.CreateItemOptionUseCase;
+import kr.hhplus.be.server.item.usecase.command.CreateItemStockUseCase;
 import kr.hhplus.be.server.item.usecase.command.CreateItemUseCase;
-import kr.hhplus.be.server.item.usecase.command.DecreaseStockUseCase;
 import kr.hhplus.be.server.item.usecase.dto.*;
-import kr.hhplus.be.server.item.usecase.query.GetItemUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@RequiredArgsConstructor
 public class ItemFacade {
 
     private final CreateItemUseCase createItemUseCase;
-    private final DecreaseStockUseCase decreaseStockUseCase;
-    private final GetItemUseCase getItemUseCase;
+    private final CreateItemOptionUseCase createItemOptionUseCase;
+    private final CreateItemStockUseCase createItemStockUseCase;
 
-    public ItemFacade(CreateItemUseCase createItemUseCase,
-                      DecreaseStockUseCase decreaseStockUseCase,
-                      GetItemUseCase getItemUseCase) {
-        this.createItemUseCase = createItemUseCase;
-        this.decreaseStockUseCase = decreaseStockUseCase;
-        this.getItemUseCase = getItemUseCase;
+    @Transactional
+    public ItemResponse registerItem(RegisterItemRequest request) {
+        request.validate();
+
+        // 1. 상품 생성
+        ItemResponse item = createItemUseCase.create(new CreateItemRequest(
+                request.name(),
+                request.price()
+        ));
+
+        // 2. 옵션 생성
+        ItemOptionResponse option = createItemOptionUseCase.create(new CreateItemOptionRequest(
+                item.id(),
+                request.size(),
+                request.color()
+        ));
+
+        // 3. 재고 생성
+        createItemStockUseCase.create(new CreateItemStockRequest(
+                option.optionId(),
+                request.quantity()
+        ));
+
+        return item;
     }
-
-    public Item create(String name, int price, int quantity) {
-        return createItemUseCase.create(name, price, quantity);
-    }
-
-    public void decrease(Long itemId, int amount) {
-        decreaseStockUseCase.decrease(itemId, amount);
-    }
-
-    public Item getById(Long id) {
-        return getItemUseCase.getById(id);
-    }
-
-    public List<Item> getAll() {
-        return getItemUseCase.findAll();
-    }
-
-    // 주문 실패 시 재고 복구
-    public void revertStock(Long itemId, int quantity) {
-        decreaseStockUseCase.restore(itemId, quantity);
-    }
-
 }

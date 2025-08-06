@@ -8,13 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class FakeDataPlatformClient {
+public class FakeDataPlatformClient implements ExternalPaymentReporter{
 
     private static final Logger log = LoggerFactory.getLogger(FakeDataPlatformClient.class);
 
-    public void sendPaymentData(Payment payment) {
-        // 실제 외부 시스템 전송 대신 로그 처리
-        log.info("🛰️ 외부 전송 완료 - Payment ID: {}, Amount: {}, Time: {}",
-                payment.getId(), payment.getFinalAmount(), payment.getPaidAt());
+    @Override
+    public void send(Payment payment) {
+        System.out.println("[Mock 외부 전송] paymentId = " + payment.getId() + ", amount = " + payment.getPayAmount());
     }
 }

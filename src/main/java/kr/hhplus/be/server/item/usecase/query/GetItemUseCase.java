@@ -1,10 +1,10 @@
 package kr.hhplus.be.server.item.usecase.query;
 
-import kr.hhplus.be.server.item.domain.model.Item;
+import kr.hhplus.be.server.item.usecase.dto.ItemDetailResponse;
 
 import java.util.List;
 
 public interface GetItemUseCase {
-    Item getById(Long id);
-    List<Item> findAll();
+    List<ItemDetailResponse> getAllItems();
+    ItemDetailResponse getItemById(Long itemId);
 }

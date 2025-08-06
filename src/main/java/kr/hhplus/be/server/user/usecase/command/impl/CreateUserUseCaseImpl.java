@@ -16,6 +16,6 @@ public class CreateUserUseCaseImpl implements CreateUserUseCase {
 
     @Override
     public User create(String name) {
-        return repository.save(new User(name));
+        return repository.save(new User(name, 0));
     }
 }
