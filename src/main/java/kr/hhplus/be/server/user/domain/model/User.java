@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "user")
 @Getter
 public class User {
 

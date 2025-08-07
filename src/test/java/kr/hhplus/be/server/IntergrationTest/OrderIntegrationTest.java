@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.IntergrationTest;
 
 import kr.hhplus.be.server.item.usecase.dto.*;
-import kr.hhplus.be.server.item.usecase.query.GetItemUseCase;
+import kr.hhplus.be.server.item.usecase.query.GetAllItemsUseCase;
 import kr.hhplus.be.server.order.usecase.dto.*;
 import kr.hhplus.be.server.order.facade.OrderFacade;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ class OrderIntegrationTest {
     private OrderFacade orderFacade;
 
     @Autowired
-    private GetItemUseCase getItemUseCase;
+    private GetAllItemsUseCase getItemUseCase;
 
     private Long itemOptionId;
     private Long itemId;

@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.order.adapter.controller;
 
+import jakarta.validation.Valid;
 import kr.hhplus.be.server.order.usecase.dto.*;
 import kr.hhplus.be.server.order.facade.OrderFacade;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class OrderController {
 
     // 주문 생성
     @PostMapping
-    public ResponseEntity<OrderResponse> placeOrder(@RequestBody OrderRequest request) {
+    public ResponseEntity<OrderResponse> placeOrder(@RequestBody @Valid OrderRequest request) {
         OrderResponse response = orderFacade.placeOrder(request);
         return ResponseEntity.ok(response);
     }

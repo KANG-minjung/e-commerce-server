@@ -6,7 +6,7 @@ import kr.hhplus.be.server.common.ErrorCode;
 import lombok.Getter;
 
 @Entity
-@Table(name = "tbl_item_stock")
+@Table(name = "item_stock")
 @Getter
 public class ItemStock {
 
