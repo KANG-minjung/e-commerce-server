@@ -4,16 +4,14 @@ import kr.hhplus.be.server.common.*;
 import kr.hhplus.be.server.user.domain.model.User;
 import kr.hhplus.be.server.user.domain.repository.UserRepository;
 import kr.hhplus.be.server.user.usecase.command.ChargeBalanceUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ChargeBalanceUseCaseImpl implements ChargeBalanceUseCase {
 
     private final UserRepository repository;
-
-    public ChargeBalanceUseCaseImpl(UserRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public void charge(Long userId, int amount) {

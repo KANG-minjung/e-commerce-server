@@ -17,7 +17,7 @@ public class BusinessException extends RuntimeException {
         return errorCode;
     }
 
-    public HttpStatus getStatus() {
-        return errorCode.getStatus();
+    public String getErrorCodeString() {
+        return errorCode.getCode(); // "POINT_NOT_ENOUGH"
     }
 }

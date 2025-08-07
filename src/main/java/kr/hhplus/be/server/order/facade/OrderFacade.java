@@ -1,19 +1,13 @@
 package kr.hhplus.be.server.order.facade;
 
+import kr.hhplus.be.server.order.usecase.query.GetOrderListUseCase;
 import org.springframework.transaction.annotation.Transactional;
-import kr.hhplus.be.server.common.BusinessException;
-import kr.hhplus.be.server.common.ErrorCode;
-import kr.hhplus.be.server.item.domain.model.Item;
-import kr.hhplus.be.server.item.domain.repository.ItemRepository;
-import kr.hhplus.be.server.item.usecase.command.DecreaseStockUseCase;
-import kr.hhplus.be.server.order.domain.model.Order;
 import kr.hhplus.be.server.order.usecase.command.CancelOrderUseCase;
 import kr.hhplus.be.server.order.usecase.command.CreateOrderUseCase;
-import kr.hhplus.be.server.order.usecase.dto.OrderCreateCommand;
 import kr.hhplus.be.server.order.usecase.dto.OrderRequest;
 import kr.hhplus.be.server.order.usecase.dto.OrderResponse;
 import kr.hhplus.be.server.order.usecase.dto.OrderSummaryResponse;
-import kr.hhplus.be.server.order.usecase.query.GetOrderUseCase;
+import kr.hhplus.be.server.order.usecase.query.GetOrderDetailUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +18,8 @@ import java.util.List;
 public class OrderFacade {
 
     private final CreateOrderUseCase createOrderUseCase;
-    private final GetOrderUseCase getOrderUseCase;
+    private final GetOrderDetailUseCase getOrderUseCase;
+    private final GetOrderListUseCase getOrderListUseCase;
     private final CancelOrderUseCase cancelOrderUseCase;
 
     @Transactional
@@ -39,7 +34,7 @@ public class OrderFacade {
 
     @Transactional(readOnly = true)
     public List<OrderSummaryResponse> getOrderList(Long userId) {
-        return getOrderUseCase.getAllByUserId(userId);
+        return getOrderListUseCase.getAllByUserId(userId);
     }
 
     @Transactional

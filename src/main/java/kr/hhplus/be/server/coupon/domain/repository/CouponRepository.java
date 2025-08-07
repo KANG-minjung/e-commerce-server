@@ -9,4 +9,6 @@ public interface CouponRepository {
     Optional<Coupon> findById(Long id);
     Coupon save(Coupon coupon);
     List<Coupon> findAll();
+
+    Coupon findByIdForUpdate(Long couponId);
 }

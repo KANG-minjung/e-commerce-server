@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tbl_user_coupon")
+@Table(name = "user_coupon")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserCoupon {

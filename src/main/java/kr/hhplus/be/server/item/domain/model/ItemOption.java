@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "tbl_item_option")
+@Table(name = "item_option")
 @Getter
 public class ItemOption {
 

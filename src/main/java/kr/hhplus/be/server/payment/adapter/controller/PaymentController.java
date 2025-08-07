@@ -1,9 +1,7 @@
 package kr.hhplus.be.server.payment.adapter.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.payment.domain.model.Payment;
+import jakarta.validation.Valid;
 import kr.hhplus.be.server.payment.facade.PaymentFacade;
 import kr.hhplus.be.server.payment.usecase.dto.PaymentRequest;
 import kr.hhplus.be.server.payment.usecase.dto.PaymentResponse;
@@ -21,7 +19,7 @@ public class PaymentController {
     private final PaymentFacade paymentFacade;
 
     @PostMapping
-    public ResponseEntity<PaymentResponse> pay(@RequestBody PaymentRequest request) {
+    public ResponseEntity<PaymentResponse> pay(@RequestBody @Valid PaymentRequest request) {
         PaymentResponse response = paymentFacade.pay(request);
         return ResponseEntity.ok(response);
     }

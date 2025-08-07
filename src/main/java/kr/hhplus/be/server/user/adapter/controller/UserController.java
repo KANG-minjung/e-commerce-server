@@ -2,6 +2,7 @@ package kr.hhplus.be.server.user.adapter.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import kr.hhplus.be.server.user.domain.model.User;
 import kr.hhplus.be.server.user.facade.UserFacade;
 import kr.hhplus.be.server.user.usecase.dto.*;
@@ -28,7 +29,7 @@ public class UserController {
 
     @PostMapping("/{id}/charge")
     @Operation(summary = "사용자 잔액 충전")
-    public ResponseEntity<Void> charge(@PathVariable Long id, @RequestBody ChargeRequest req) {
+    public ResponseEntity<Void> charge(@PathVariable Long id, @RequestBody @Valid ChargeRequest req) {
         userFacade.charge(id, req.amount());
         return ResponseEntity.ok().build();
     }

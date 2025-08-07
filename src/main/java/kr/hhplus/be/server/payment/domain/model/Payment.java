@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tbl_payment")
+@Table(name = "payment")
 @Getter
 public class Payment {
 

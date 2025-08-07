@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.coupon.usecase.command;
 
-public interface UseCouponUseCase {
+public interface MarkCouponUsedUseCase {
     void use(Long userId, Long couponId);
-    int executeIfPresent(Long couponId, int price);
 }
