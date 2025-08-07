@@ -18,8 +18,7 @@ public class DecreaseStockUseCaseImpl implements DecreaseStockUseCase {
 
     @Override
     public void decrease(Long itemOptionId, int quantity) {
-        ItemStock stock = itemStockRepository.findByItemOptionId(itemOptionId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_ITEM_STOCK));
+        ItemStock stock = itemStockRepository.findByIdForUpdate(itemOptionId);
         stock.decrease(quantity);
         itemStockRepository.save(stock);
     }

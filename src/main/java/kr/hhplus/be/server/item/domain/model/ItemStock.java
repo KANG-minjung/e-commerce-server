@@ -23,6 +23,14 @@ public class ItemStock {
 
     protected ItemStock() {}
 
+    public ItemStock(Long id, int quantity) {
+        if (quantity < 0) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_QUANTITY);
+        }
+        this.quantity = quantity;
+        this.id = id;
+    }
+
     public ItemStock(int quantity) {
         if (quantity < 0) {
             throw new BusinessException(ErrorCode.INVALID_ITEM_QUANTITY);

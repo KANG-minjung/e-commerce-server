@@ -15,9 +15,7 @@ public class DeductBalanceUseCaseImpl implements DeductBalanceUseCase {
 
     @Override
     public void deduct(Long userId, int amount) {
-        User user = repository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_INVALID));
-
+        User user = repository.findByIdForUpdate(userId);
         user.decreaseBalance(amount);
         repository.save(user);
     }

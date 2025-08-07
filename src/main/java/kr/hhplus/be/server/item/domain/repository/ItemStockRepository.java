@@ -9,4 +9,5 @@ public interface ItemStockRepository {
     Optional<ItemStock> findByItemOptionId(Long itemOptionId);
     ItemStock save(ItemStock stock);
     void restore(Long itemOptionId, int quantity);
+    ItemStock findByIdForUpdate(Long stockId);
 }

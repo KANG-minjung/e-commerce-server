@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.item.adapter.repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.item.domain.model.ItemStock;
@@ -45,5 +46,16 @@ public class ItemStockRepositoryImpl implements ItemStockRepository {
                 .setParameter("qty", quantity)
                 .setParameter("optionId", itemOptionId)
                 .executeUpdate();
+    }
+
+    @Override
+    public ItemStock findByIdForUpdate(Long stockId) {
+        return entityManager.createQuery("""
+                SELECT s FROM ItemStock s
+                WHERE s.id = :stockId
+                """, ItemStock.class)
+                .setParameter("stockId", stockId)
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE) // SELECT FOR UPDATE
+                .getSingleResult();
     }
 }

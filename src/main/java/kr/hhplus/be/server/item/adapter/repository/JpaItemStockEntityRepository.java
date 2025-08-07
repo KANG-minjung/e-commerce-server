@@ -13,6 +13,8 @@ public interface JpaItemStockEntityRepository extends JpaRepository<ItemStock, L
     void restore(Long itemOptionId, int quantity);
 
     @Modifying
-    @Query("UPDATE ItemStock s SET s.quantity = s.quantity - :amount WHERE s.itemId = :itemId AND s.quantity >= :amount")
+    @Query("UPDATE ItemStock s SET s.quantity = s.quantity - :amount WHERE s.id = :itemId AND s.quantity >= :amount")
     int decreaseStock(@Param("itemId") Long itemId, @Param("amount") int amount);
+
+    ItemStock findByIdForUpdate(Long stockId);
 }
