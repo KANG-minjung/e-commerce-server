@@ -2,10 +2,12 @@ package kr.hhplus.be.server.coupon.adapter.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
+import kr.hhplus.be.server.coupon.domain.model.Coupon;
 import kr.hhplus.be.server.coupon.domain.model.UserCoupon;
 import kr.hhplus.be.server.coupon.domain.repository.UserCouponRepository;
 import kr.hhplus.be.server.item.domain.model.Item;
 import kr.hhplus.be.server.item.domain.repository.ItemRepository;
+import kr.hhplus.be.server.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -48,6 +50,30 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
                 .setParameter("id", id)
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .getResultList().stream().findFirst();
+    }
+
+    @Override
+    public boolean existsByUserAndCoupon(User user, Coupon coupon) {
+        String ql = """
+            SELECT COUNT(uc) FROM UserCoupon uc
+            WHERE uc.user = :user AND uc.coupon = :coupon
+        """;
+        Long count = entityManager.createQuery(ql, Long.class)
+                .setParameter("user", user)
+                .setParameter("coupon", coupon)
+                .getSingleResult();
+        return count > 0;
+    }
+
+    @Override
+    public long countByCoupon(Coupon coupon) {
+        String ql = """
+            SELECT COUNT(uc) FROM UserCoupon uc
+            WHERE uc.coupon = :coupon
+        """;
+        return entityManager.createQuery(ql, Long.class)
+                .setParameter("coupon", coupon)
+                .getSingleResult();
     }
 }
 

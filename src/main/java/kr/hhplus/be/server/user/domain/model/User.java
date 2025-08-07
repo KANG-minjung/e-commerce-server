@@ -29,6 +29,15 @@ public class User {
     protected User() {
     }
 
+    public User(Long id, int balance) {
+        if (balance < 0) {
+            throw new BusinessException(ErrorCode.INVALID_USER_BALANCE);
+        }
+
+        this.id = id;
+        this.balance = balance;
+        this.updateDate = LocalDateTime.now();
+    }
     public User(String name, int balance) {
         if (name == null || name.isBlank()) {
             throw new BusinessException(ErrorCode.USER_INVALID);
