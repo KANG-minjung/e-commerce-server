@@ -35,6 +35,17 @@ public class Coupon {
 
     private int issuedCount;
 
+    public Coupon(String couponNm, int issueLimit) {
+        this.couponNm = couponNm;
+        this.issueLimit = issueLimit;
+        this.issuedCount = 0;
+
+        // 테스트를 위한 기본 값 설정 (생략 가능)
+        this.couponType = CouponType.RATE;     // 비율 할인 기본
+        this.discountRate = 10.0f;             // 10% 할인
+        this.status = CouponStatus.AVAILABLE;
+    }
+
     public void issue() {
         if (issuedCount >= issueLimit) {
             throw new BusinessException(ErrorCode.COUPON_OUT_OF_STOCK);

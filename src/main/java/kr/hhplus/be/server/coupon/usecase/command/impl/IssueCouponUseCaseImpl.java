@@ -31,12 +31,12 @@ public class IssueCouponUseCaseImpl implements IssueCouponUseCase {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_INVALID));
 
-        Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.COUPON_NOT_FOUND));
+        Coupon coupon = couponRepository.findByIdForUpdate(couponId);
 
         coupon.issue(); // 수량 제한 체크 + 증가
         couponRepository.save(coupon);
 
-        userCouponRepository.save(new UserCoupon(user, coupon));
+        UserCoupon userCoupon = new UserCoupon(user, coupon);
+        userCouponRepository.save(userCoupon);
     }
 }
