@@ -4,21 +4,19 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import kr.hhplus.be.server.coupon.domain.model.Coupon;
 import kr.hhplus.be.server.coupon.domain.repository.CouponRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class CouponRepositoryImpl implements CouponRepository {
 
     private final CouponJpaEntityRepository jpa;
 
     private final EntityManager em;
-
-    public CouponRepositoryImpl(CouponJpaEntityRepository jpa) {
-        this.jpa = jpa;
-    }
 
     @Override
     public Optional<Coupon> findById(Long id) {
