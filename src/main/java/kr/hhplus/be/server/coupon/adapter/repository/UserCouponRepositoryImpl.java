@@ -2,16 +2,23 @@ package kr.hhplus.be.server.coupon.adapter.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
+import kr.hhplus.be.server.coupon.domain.model.Coupon;
 import kr.hhplus.be.server.coupon.domain.model.UserCoupon;
 import kr.hhplus.be.server.coupon.domain.repository.UserCouponRepository;
 import kr.hhplus.be.server.item.domain.model.Item;
 import kr.hhplus.be.server.item.domain.repository.ItemRepository;
+import kr.hhplus.be.server.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 복잡한 발급 수 제한, 다중 조건 쿼리 및 향후 확장을 고려하여
+ * Spring Data Repository 대신 직접 구현체 방식 유지.
+ * 전체 구조에서 일관성 있게 adapter 계층에서 구현함.
+ */
 @Repository
 @RequiredArgsConstructor
 public class UserCouponRepositoryImpl implements UserCouponRepository {
@@ -21,7 +28,7 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
 
     @Override
     public Optional<UserCoupon> findByUser_IdAndCoupon_Id(Long userId, Long couponId) {
-        return jpa.findByUserIdAndCouponId(userId, couponId);
+        return jpa.findByUser_IdAndCoupon_Id(userId, couponId);
     }
 
     @Override
@@ -43,6 +50,30 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
                 .setParameter("id", id)
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .getResultList().stream().findFirst();
+    }
+
+    @Override
+    public boolean existsByUserAndCoupon(User user, Coupon coupon) {
+        String ql = """
+            SELECT COUNT(uc) FROM UserCoupon uc
+            WHERE uc.user = :user AND uc.coupon = :coupon
+        """;
+        Long count = entityManager.createQuery(ql, Long.class)
+                .setParameter("user", user)
+                .setParameter("coupon", coupon)
+                .getSingleResult();
+        return count > 0;
+    }
+
+    @Override
+    public long countByCoupon(Coupon coupon) {
+        String ql = """
+            SELECT COUNT(uc) FROM UserCoupon uc
+            WHERE uc.coupon = :coupon
+        """;
+        return entityManager.createQuery(ql, Long.class)
+                .setParameter("coupon", coupon)
+                .getSingleResult();
     }
 }
 

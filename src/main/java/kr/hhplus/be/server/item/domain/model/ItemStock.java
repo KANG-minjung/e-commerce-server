@@ -6,7 +6,7 @@ import kr.hhplus.be.server.common.ErrorCode;
 import lombok.Getter;
 
 @Entity
-@Table(name = "tbl_item_stock")
+@Table(name = "item_stock")
 @Getter
 public class ItemStock {
 
@@ -22,6 +22,14 @@ public class ItemStock {
     private int quantity;
 
     protected ItemStock() {}
+
+    public ItemStock(Long id, int quantity) {
+        if (quantity < 0) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_QUANTITY);
+        }
+        this.quantity = quantity;
+        this.id = id;
+    }
 
     public ItemStock(int quantity) {
         if (quantity < 0) {

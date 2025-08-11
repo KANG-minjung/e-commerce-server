@@ -11,7 +11,7 @@ import kr.hhplus.be.server.common.ErrorCode;
 import lombok.Getter;
 
 @Entity
-@Table(name = "tbl_order_item")
+@Table(name = "order_item")
 @Getter
 public class OrderItem {
 

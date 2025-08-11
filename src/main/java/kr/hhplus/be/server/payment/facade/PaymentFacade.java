@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.payment.facade;
 
-import kr.hhplus.be.server.coupon.usecase.command.UseCouponUseCase;
+import kr.hhplus.be.server.coupon.usecase.command.ApplyCouponUseCase;
 import kr.hhplus.be.server.order.domain.model.Order;
 import kr.hhplus.be.server.order.usecase.command.MarkOrderAsPaidUseCase;
 import kr.hhplus.be.server.payment.adapter.external.ExternalPaymentReporter;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentFacade {
 
     private final GetOrderForPaymentUseCase getOrderUseCase;
-    private final UseCouponUseCase useCouponUseCase;
+    private final ApplyCouponUseCase useCouponUseCase;
     private final DeductBalanceUseCase deductBalanceUseCase;
     private final MarkOrderAsPaidUseCase markOrderAsPaidUseCase;
     private final ProcessPaymentUseCase processPaymentUseCase;

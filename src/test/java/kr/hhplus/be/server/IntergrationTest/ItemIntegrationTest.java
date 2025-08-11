@@ -3,7 +3,8 @@ package kr.hhplus.be.server.IntergrationTest;
 import kr.hhplus.be.server.item.usecase.command.RestoreItemStockUseCase;
 import kr.hhplus.be.server.item.usecase.command.DecreaseStockUseCase;
 import kr.hhplus.be.server.item.usecase.dto.ItemDetailResponse;
-import kr.hhplus.be.server.item.usecase.query.GetItemUseCase;
+import kr.hhplus.be.server.item.usecase.query.GetAllItemsUseCase;
+import kr.hhplus.be.server.item.usecase.query.GetItemByIdUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 class ItemIntegrationTest {
 
     @Autowired
-    private GetItemUseCase getItemUseCase;
+    private GetAllItemsUseCase getAllItemsUseCase;
 
     @Autowired
     private DecreaseStockUseCase decreaseStockUseCase;
@@ -31,7 +32,7 @@ class ItemIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        List<ItemDetailResponse> items = getItemUseCase.getAllItems();
+        List<ItemDetailResponse> items = getAllItemsUseCase.getAllItems();
         assertThat(items).isNotEmpty();
 
         ItemDetailResponse.ItemOptionResponse option = items.get(0).options().get(0);
@@ -42,7 +43,7 @@ class ItemIntegrationTest {
     @Test
     @DisplayName("전체 상품 목록 조회 성공")
     void testGetAllItems() {
-        List<ItemDetailResponse> items = getItemUseCase.getAllItems();
+        List<ItemDetailResponse> items = getAllItemsUseCase.getAllItems();
 
         assertThat(items).isNotEmpty();
         assertThat(items.get(0).options()).isNotEmpty();
@@ -60,7 +61,7 @@ class ItemIntegrationTest {
         restoreItemStockUseCase.restore(targetOptionId, amount);
 
         // 복원 검증
-        List<ItemDetailResponse> items = getItemUseCase.getAllItems();
+        List<ItemDetailResponse> items = getAllItemsUseCase.getAllItems();
         int restored = items.stream()
                 .flatMap(item -> item.options().stream())
                 .filter(opt -> opt.optionId().equals(targetOptionId))

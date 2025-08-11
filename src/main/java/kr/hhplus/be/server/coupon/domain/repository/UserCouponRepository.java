@@ -1,7 +1,9 @@
 package kr.hhplus.be.server.coupon.domain.repository;
 
 import jakarta.persistence.LockModeType;
+import kr.hhplus.be.server.coupon.domain.model.Coupon;
 import kr.hhplus.be.server.coupon.domain.model.UserCoupon;
+import kr.hhplus.be.server.user.domain.model.User;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,7 @@ public interface UserCouponRepository {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT c FROM Coupon c WHERE c.id = :id")
     Optional<UserCoupon> findByIdForUpdate(@Param("id") Long id);
+
+    boolean existsByUserAndCoupon(User user, Coupon coupon);
+    long countByCoupon(Coupon coupon);
 }

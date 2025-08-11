@@ -2,6 +2,7 @@ package kr.hhplus.be.server.coupon.adapter.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import kr.hhplus.be.server.coupon.domain.model.Coupon;
 import kr.hhplus.be.server.coupon.facade.CouponFacade;
 import kr.hhplus.be.server.coupon.usecase.dto.*;
@@ -22,7 +23,7 @@ public class CouponController {
 
     @PostMapping("/issuance")
     @Operation(summary = "쿠폰 발행")
-    public ResponseEntity<Void> issue(@PathVariable Long userId, @RequestBody IssueCouponRequest request) {
+    public ResponseEntity<Void> issue(@PathVariable Long userId, @RequestBody @Valid IssueCouponRequest request) {
         facade.issue(userId, request.couponId());
         return ResponseEntity.ok().build();
     }

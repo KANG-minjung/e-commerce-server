@@ -4,7 +4,6 @@ import kr.hhplus.be.server.item.usecase.dto.ItemDetailResponse;
 
 import java.util.List;
 
-public interface GetItemUseCase {
+public interface GetAllItemsUseCase {
     List<ItemDetailResponse> getAllItems();
-    ItemDetailResponse getItemById(Long itemId);
 }

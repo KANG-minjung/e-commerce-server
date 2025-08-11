@@ -7,7 +7,8 @@ import jakarta.validation.Valid;
 import kr.hhplus.be.server.item.facade.ItemFacade;
 import kr.hhplus.be.server.item.facade.OrderItemFacade;
 import kr.hhplus.be.server.item.usecase.dto.*;
-import kr.hhplus.be.server.item.usecase.query.GetItemUseCase;
+import kr.hhplus.be.server.item.usecase.query.GetAllItemsUseCase;
+import kr.hhplus.be.server.item.usecase.query.GetItemByIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,8 @@ public class ItemController {
 
     private final ItemFacade itemFacade;
     private final OrderItemFacade orderItemFacade;
-    private final GetItemUseCase getItemUseCase;
+    private final GetAllItemsUseCase getAllItemUseCase;
+    private final GetItemByIdUseCase getItemByIdUseCase;
 
     @PostMapping
     @Operation(summary = "상품 생성")
@@ -46,7 +48,7 @@ public class ItemController {
     @GetMapping
     @Operation(summary = "상품 목록 조회")
     public ResponseEntity<List<ItemDetailResponse>> getAllItems() {
-        List<ItemDetailResponse> items = getItemUseCase.getAllItems();
+        List<ItemDetailResponse> items = getAllItemUseCase.getAllItems();
         return ResponseEntity.ok(items);
     }
 
@@ -54,7 +56,7 @@ public class ItemController {
     @GetMapping("/{id}")
     @Operation(summary = "상품 상세 조회")
     public ResponseEntity<ItemDetailResponse> getItem(@PathVariable Long id) {
-        ItemDetailResponse item = getItemUseCase.getItemById(id);
+        ItemDetailResponse item = getItemByIdUseCase.getItemById(id);
         return ResponseEntity.ok(item);
     }
 }
